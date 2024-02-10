@@ -1,0 +1,126 @@
+// <CONSTANTS> ==============
+$form-input-padding: 15px;
+$form-font-size: 16px;
+$form-field-height: 50px;
+// </CONSTANTS> =============
+.form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 400px;
+	margin: 0px auto;
+	padding: 20px 30px;
+	gap: 20px;
+
+	background-color: #ffffff;
+	border-radius: 10px;
+	box-shadow: 1.5px 0 23.5px 5.5px #e6e6e6;
+	&__title {
+		color: #3a3a3a;
+	}
+
+	&__item {
+		width: 100%;
+		position: relative;
+		&:has(.form__input:focus),
+		&:has(.form__input:not(:placeholder-shown)) {
+			.form__label {
+				color: #096de0;
+				top: 0;
+				font-size: $form-font-size - 2px;
+				background-color: #fff;
+				padding: 5px;
+			}
+		}
+	}
+
+	&__label {
+		position: absolute;
+		top: 50%;
+		left: $form-input-padding;
+		translate: 0% -50%;
+
+		font-size: $form-font-size;
+		color: #c5c5c5;
+		line-height: 1;
+
+		transition: all 0.3s ease 0s;
+		&--username {
+		}
+
+		&--email {
+		}
+
+		&--phone {
+		}
+
+		&--message {
+			top: $form-field-height / 2;
+		}
+	}
+
+	&__input {
+		margin: 0;
+		min-width: 100%;
+		height: $form-field-height;
+		font-size: $form-font-size;
+		padding: 0 $form-input-padding;
+
+		border: 1px solid #d4d4d4;
+		border-radius: 8px;
+		background-color: transparent;
+
+		outline: none;
+		&:focus {
+			border-color: #91bae9;
+		}
+		&::placeholder {
+			color: transparent;
+		}
+		&--textarea {
+			height: 100px;
+			padding-top: $form-field-height / 2 - $form-font-size + 2px;
+			resize: none;
+		}
+	}
+
+	&__btn {
+		position: relative;
+		z-index: 1000;
+		display: inline-block;
+		width: 200px;
+		height: 50px;
+
+		border: none;
+		border-radius: 10px;
+		font-size: 18px;
+		background: #a34ea0;
+		background: -webkit-linear-gradient(159deg, #a76aa4 0%, #f0919e 50%, #f3a474 100%);
+		background: linear-gradient(159deg, #a76aa4 0%, #f0919e 50%, #f3a474 100%);
+
+		&:before {
+			content: "";
+			display: block;
+			opacity: 0;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: -1000;
+			border-radius: 10px;
+
+			background: #a34ea0;
+			background: -webkit-linear-gradient(159deg, #a34ea0 0%, #ec7282 50%, #f39357 100%);
+			background: linear-gradient(159deg, #a34ea0 0%, #ec7282 50%, #f39357 100%);
+			transition: all 0.6s ease 0s;
+		}
+		&:hover::before {
+			opacity: 1;
+		}
+		&:active:before {
+			transition: all 0s ease 0s;
+			box-shadow: inset 0px 5px 10px 2px #693868;
+		}
+	}
+}
