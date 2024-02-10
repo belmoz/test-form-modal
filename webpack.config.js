@@ -1,12 +1,12 @@
 const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
 	mode: "development",
 	entry: "./src/index.js",
 	output: {
-		path: path.resolve(__dirname, "dist"),
 		filename: "bundle.js",
-		publicPath: "/",
+		path: path.resolve(__dirname, "dist"),
 	},
 	resolve: {
 		// modules: [path.resolve(__dirname, "src"), "node_modules"],
@@ -21,13 +21,20 @@ module.exports = {
 			},
 			{
 				test: /\.scss$/,
+				exclude: /node_modules/,
 				use: ["style-loader", "css-loader", "sass-loader"],
 			},
 		],
 	},
+	plugins: [
+		new HtmlWebpackPlugin({
+			template: "./index.html",
+		}),
+	],
 	devServer: {
-		static: path.join(__dirname, "./"),
-		compress: true,
-		port: 8080,
+		static: {
+			directory: path.join(__dirname, "dist"), // Каталог для статики
+		},
+		open: true, // Автоматически открывать браузер
 	},
 };
