@@ -4,6 +4,7 @@ import "./Form.styles.scss";
 import { FORM_FIELDS, PHONE_MASK } from "../../../utils/constants/form.constants";
 import { formValidator } from "../../../utils/helpers/form.helpers";
 import FormItemLayout from "./FormItemLayout";
+import { submitForm } from "../../../services/api/form.api";
 
 export const initialForm = {
 	[FORM_FIELDS.username]: "",
@@ -20,9 +21,9 @@ const Form = () => {
 		const { validationObject, allValid } = formValidator(formData);
 		if (!allValid) {
 			setFormValidatorData(validationObject);
-			// setFormData(initialForm);
-			return;
+			return false;
 		}
+		submitForm(formData).then((data) => console.log(data));
 		setFormData(initialForm);
 	};
 
@@ -40,7 +41,6 @@ const Form = () => {
 				[name]: value,
 			}));
 			if (formValidatorData[name]?.message.length !== 0) {
-				console.log("setFormValidatorData");
 				setFormValidatorData((prev) => ({
 					...prev,
 					[name]: {

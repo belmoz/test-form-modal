@@ -11,7 +11,6 @@ export const formValidator = (formData) => {
 		if (!value || (key === FORM_FIELDS.phone && value.length < PHONE_MASK.length - 1)) {
 			validationObject[key] = { valid: false, message: "Поле должно быть заполнено!" };
 			allValid = false;
-			console.log(validationObject[key], key === FORM_FIELDS.phone && value.length < PHONE_MASK.length - 1);
 		} else if (key === FORM_FIELDS.email && !emailRegex.test(value)) {
 			validationObject[key] = { valid: false, message: "E-mail должен быть заполнен правильно!" };
 			allValid = false;
@@ -19,7 +18,6 @@ export const formValidator = (formData) => {
 			validationObject[key] = { valid: true, message: "" };
 		}
 	}
-	console.log(validationObject);
 
 	return { validationObject, allValid };
 };
