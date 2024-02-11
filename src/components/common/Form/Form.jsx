@@ -16,15 +16,19 @@ export const initialForm = {
 const Form = () => {
 	const [formData, setFormData] = useState(initialForm);
 	const [formValidatorData, setFormValidatorData] = useState({});
+	const [response, setResponse] = useState({});
+	const [loader, setLoader] = useState(false);
 
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
 		const { validationObject, allValid } = formValidator(formData);
 		if (!allValid) {
 			setFormValidatorData(validationObject);
 			return false;
 		}
-		submitForm(formData).then((data) => console.log(data));
+		setLoader(true);
+		await submitForm(formData).then((data) => setResponse(data));
 		setFormData(initialForm);
+		setLoader(false);
 	};
 
 	const handleOnKeyEnter = (event) => {
@@ -124,6 +128,8 @@ const Form = () => {
 					value={formData[FORM_FIELDS.message]}
 				></textarea>
 			</FormItemLayout>
+			{!loader && <span className={`form__advice advice-${response.status}`}>{response.message}</span>}
+			{loader && <span className={`form__advice`}>Форма отправляется...</span>}
 			<button
 				className='form__btn btn'
 				type='submit'
