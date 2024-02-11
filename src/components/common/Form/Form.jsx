@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import InputMask from "react-input-mask";
 import "./Form.styles.scss";
-import { FORM_FIELDS } from "../../../utils/constants/form.constants";
+import { FORM_FIELDS, PHONE_MASK } from "../../../utils/constants/form.constants";
+import { formValidator } from "../../../utils/helpers/form.helpers";
+import FormItemLayout from "./FormItemLayout";
 
 export const initialForm = {
 	[FORM_FIELDS.username]: "",
@@ -12,9 +14,15 @@ export const initialForm = {
 
 const Form = () => {
 	const [formData, setFormData] = useState(initialForm);
+	const [formValidatorData, setFormValidatorData] = useState({});
 
 	const handleSubmit = () => {
-		console.log(formData);
+		const { validationObject, allValid } = formValidator(formData);
+		if (!allValid) {
+			setFormValidatorData(validationObject);
+			// setFormData(initialForm);
+			return;
+		}
 		setFormData(initialForm);
 	};
 
@@ -31,16 +39,32 @@ const Form = () => {
 				...prev,
 				[name]: value,
 			}));
+			if (formValidatorData[name]?.message.length !== 0) {
+				console.log("setFormValidatorData");
+				setFormValidatorData((prev) => ({
+					...prev,
+					[name]: {
+						// ...prev[name],
+						valid: true,
+						message: "",
+					},
+				}));
+			}
 		}
 	};
 
 	return (
 		<form className='form' onSubmit={handleSubmit}>
 			<h2 className='form__title'>Отправь и работай в ITProfit</h2>
-			<div className='form__item'>
-				<label className='form__label form__label--username'>Имя</label>
+			<FormItemLayout
+				label={"Имя"}
+				itemName={FORM_FIELDS.username}
+				formValidatorItem={formValidatorData[FORM_FIELDS.username]}
+			>
 				<input
-					className='form__input'
+					className={`form__input ${
+						formValidatorData[FORM_FIELDS.username]?.valid === false && "invalid-field"
+					}`}
 					type='text'
 					name={FORM_FIELDS.username}
 					placeholder=''
@@ -48,11 +72,16 @@ const Form = () => {
 					onChange={handleOnChange}
 					value={formData[FORM_FIELDS.username]}
 				/>
-			</div>
-			<div className='form__item'>
-				<label className='form__label form__label--email'>E-mail</label>
+			</FormItemLayout>
+			<FormItemLayout
+				label={"E-mail"}
+				itemName={FORM_FIELDS.email}
+				formValidatorItem={formValidatorData[FORM_FIELDS.email]}
+			>
 				<input
-					className='form__input'
+					className={`form__input ${
+						formValidatorData[FORM_FIELDS.email]?.valid === false && "invalid-field"
+					}`}
 					type='email'
 					name={FORM_FIELDS.email}
 					placeholder=''
@@ -60,12 +89,18 @@ const Form = () => {
 					onChange={handleOnChange}
 					value={formData[FORM_FIELDS.email]}
 				/>
-			</div>
-			<div className='form__item'>
-				<label className='form__label form__label--phone'>Телефон</label>
+			</FormItemLayout>
+			<FormItemLayout
+				label={"Телефон"}
+				itemName={FORM_FIELDS.phone}
+				formValidatorItem={formValidatorData[FORM_FIELDS.phone]}
+			>
 				<InputMask
-					className='form__input'
-					mask='+375 (2\9) 999-99-99'
+					className={`form__input ${
+						formValidatorData[FORM_FIELDS.phone]?.valid === false && "invalid-field"
+					}`}
+					mask={PHONE_MASK}
+					maskChar={null}
 					type='tel'
 					name={FORM_FIELDS.phone}
 					placeholder=''
@@ -73,17 +108,22 @@ const Form = () => {
 					onChange={handleOnChange}
 					value={formData[FORM_FIELDS.phone]}
 				/>
-			</div>
-			<div className='form__item'>
-				<label className='form__label form__label--message'>Сообщение</label>
+			</FormItemLayout>
+			<FormItemLayout
+				label={"Сообщение"}
+				itemName={FORM_FIELDS.message}
+				formValidatorItem={formValidatorData[FORM_FIELDS.message]}
+			>
 				<textarea
-					className='form__input form__input--textarea'
+					className={`form__input form__input--textarea ${
+						formValidatorData[FORM_FIELDS.message]?.valid === false ? "invalid-field" : ""
+					}`}
 					name={FORM_FIELDS.message}
 					placeholder=''
 					onChange={handleOnChange}
 					value={formData[FORM_FIELDS.message]}
 				></textarea>
-			</div>
+			</FormItemLayout>
 			<button
 				className='form__btn btn'
 				type='submit'
