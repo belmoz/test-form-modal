@@ -44,6 +44,7 @@ $form-field-height: 50px;
 		font-size: $form-font-size;
 		color: #c5c5c5;
 		line-height: 1;
+		pointer-events: none;
 
 		transition: all 0.3s ease 0s;
 		&--username {
