@@ -26,8 +26,12 @@ const Form = () => {
 			return false;
 		}
 		setLoader(true);
-		await submitForm(formData).then((data) => setResponse(data));
-		setFormData(initialForm);
+		await submitForm(formData).then((data) => {
+			if (data.status === "success") {
+				setFormData(initialForm);
+			}
+			setResponse(data);
+		});
 		setLoader(false);
 	};
 
